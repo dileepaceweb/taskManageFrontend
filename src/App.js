@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import './App.css'; // Importing CSS for styling
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -32,6 +31,7 @@ function App() {
 
   const handleChange = (e, id) => {
     const { name, value } = e.target;
+  
     setTasks(prevTasks => {
       return prevTasks.map(task => {
         if (task._id === id) {
@@ -41,7 +41,7 @@ function App() {
       });
     });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -84,7 +84,7 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ textAlign: "center" }}>
       <h1>Task Management</h1>
       <div className="search-container">
         <input
@@ -95,6 +95,7 @@ function App() {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -114,7 +115,8 @@ function App() {
         />
         <button type="submit">Add Task</button>
       </form>
-      <table>
+
+      <table style={{ margin: "0 auto" }}>
         <thead>
           <tr>
             <th>Title</th>
@@ -122,6 +124,7 @@ function App() {
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {filteredTasks.map((task) => (
             <tr key={task._id}>
