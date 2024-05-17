@@ -93,9 +93,9 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div style={{ textAlign: "center" }}>
       <h1>Task Management</h1>
-      <div className="search-container">
+      <div>
         <input
           type="text"
           placeholder="Search"
@@ -125,7 +125,7 @@ function App() {
         <button type="submit">Add Task</button>
       </form>
 
-      <table>
+      <table style={{ margin: "0 auto" }}>
 
         <thead>
           <tr>
