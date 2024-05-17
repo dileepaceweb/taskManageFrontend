@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import './App.css'; // Importing CSS for styling
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -35,10 +34,7 @@ function App() {
   };
 
   const handleChange = (e) => {
-    console.log(" handle chage id,,,,,,,,,,", editingTaskId);
     const { name, value } = e.target;
-    console.log("name:", name);
-    console.log("value:", value);
     setEditTask((prevTask) => ({
       ...prevTask,
       [name]: value,
@@ -67,11 +63,7 @@ function App() {
 
   const handleUpdate = async (id) => {
     try {
-      console.log(editTask);
       await axios.put(`http://localhost:5000/updateTask/${id}`, editTask);
-      console.log("id:", id);
-      console.log("title:", editTask.title);
-      console.log("description:", editTask.description);
       setEditingTaskId(null); // Reset editing status after update
       fetchTasks();
     } catch (error) {
@@ -88,7 +80,7 @@ function App() {
 
   const handleEditClick = (task) => {
 
-    setEditingTaskId(task._id); // Set editing status when "Edit" button is clicked
+    setEditingTaskId(task._id); 
     setEditTask({ title: task.title, description: task.description });
   };
 
