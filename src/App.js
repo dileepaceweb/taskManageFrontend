@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './App.css'; // Importing CSS for styling
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({
+    title: "",
+    description: ""
+  });
+  const [editTask, setEditTask] = useState({
     title: "",
     description: ""
   });
@@ -29,19 +34,17 @@ function App() {
     }
   };
 
-  const handleChange = (e, id) => {
+  const handleChange = (e) => {
+    console.log(" handle chage id,,,,,,,,,,", editingTaskId);
     const { name, value } = e.target;
-  
-    setTasks(prevTasks => {
-      return prevTasks.map(task => {
-        if (task._id === id) {
-          return { ...task, [name]: value };
-        }
-        return task;
-      });
-    });
+    console.log("name:", name);
+    console.log("value:", value);
+    setEditTask((prevTask) => ({
+      ...prevTask,
+      [name]: value,
+    }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -62,9 +65,13 @@ function App() {
     }
   };
 
-  const handleUpdate = async (id, title, description) => {
+  const handleUpdate = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/updateTask/${id}`, { title, description });
+      console.log(editTask);
+      await axios.put(`http://localhost:5000/updateTask/${id}`, editTask);
+      console.log("id:", id);
+      console.log("title:", editTask.title);
+      console.log("description:", editTask.description);
       setEditingTaskId(null); // Reset editing status after update
       fetchTasks();
     } catch (error) {
@@ -79,12 +86,14 @@ function App() {
     setFilteredTasks(filtered);
   };
 
-  const handleEditClick = (id) => {
-    setEditingTaskId(id); // Set editing status when "Edit" button is clicked
+  const handleEditClick = (task) => {
+
+    setEditingTaskId(task._id); // Set editing status when "Edit" button is clicked
+    setEditTask({ title: task.title, description: task.description });
   };
 
   return (
-    <div className="container" style={{ textAlign: "center" }}>
+    <div className="container">
       <h1>Task Management</h1>
       <div className="search-container">
         <input
@@ -116,7 +125,8 @@ function App() {
         <button type="submit">Add Task</button>
       </form>
 
-      <table style={{ margin: "0 auto" }}>
+      <table>
+
         <thead>
           <tr>
             <th>Title</th>
@@ -133,8 +143,8 @@ function App() {
                   <input
                     type="text"
                     name="title"
-                    value={task.title}
-                    onChange={(e) => handleChange(e, task._id)}
+                    value={editTask.title}
+                    onChange={handleChange}
                   />
                 ) : (
                   task.title
@@ -145,8 +155,8 @@ function App() {
                   <input
                     type="text"
                     name="description"
-                    value={task.description}
-                    onChange={(e) => handleChange(e, task._id)}
+                    value={editTask.description}
+                    onChange={handleChange}
                   />
                 ) : (
                   task.description
@@ -154,9 +164,9 @@ function App() {
               </td>
               <td>
                 {editingTaskId === task._id ? (
-                  <button onClick={() => handleUpdate(task._id, task.title, task.description)}>Save</button>
+                  <button onClick={() => handleUpdate(task._id)}>Save</button>
                 ) : (
-                  <button onClick={() => handleEditClick(task._id)}>Edit</button>
+                  <button onClick={() => handleEditClick(task)}>Edit</button>
                 )}
                 <button onClick={() => handleDelete(task._id)}>Delete</button>
               </td>
